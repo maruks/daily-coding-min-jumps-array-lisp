@@ -44,14 +44,13 @@
   (when (and (plusp (length vec)) (plusp (svref vec 0)))
     (iter
       (with steps = (svref vec 0))
-      (with max-reach = (svref vec 0))
       (with result = 1)
       (for index :from 1 :to (1- (length vec)))
+      (for max-reach :initially (svref vec 0) :then (max max-reach (+ index (svref vec index))))
       (always (<= index max-reach))
       (if (zerop steps)
 	  (progn
 	    (setf steps (- max-reach index))
 	    (incf result))
 	  (decf steps))
-      (setf max-reach (max max-reach (+ index (svref vec index))))
       (finally (return result)))))
